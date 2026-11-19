@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predict a type | PokéType</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">P</span> PokéType</a>
+    <nav aria-label="Main navigation">
+      <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+      <a class="button button-small active-button" href="{{ url_for('predict') }}">Predict</a>
+    </nav>
+  </header>
+
+  <main class="form-page">
+    <section class="form-intro">
+      <p class="eyebrow">Type prediction</p>
+      <h1>Enter your Pokémon’s stats</h1>
+      <p>Fill in the battle stats below to get a primary type prediction.</p>
+    </section>
+
+    <section class="form-card">
+      {% if error %}
+        <p class="message error-message" role="alert">{{ error }}</p>
+      {% endif %}
+
+      {% if prediction %}
+        <div class="message result-message" role="status">
+          <span class="eyebrow">Predicted primary type</span>
+          <strong>{{ prediction|capitalize }}</strong>
+          <span class="result-note">This is a model estimate, not a guaranteed result.</span>
+        </div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('predict') }}">
+        <div class="field-grid">
+          <label>
+            <span>Height <small>(dm)</small></span>
+            <input name="height_dm" type="number" min="0" step="any" required value="{{ form_values.get('height_dm', '') }}" placeholder="e.g. 7">
+          </label>
+          <label>
+            <span>Weight <small>(hg)</small></span>
+            <input name="weight_hg" type="number" min="0" step="any" required value="{{ form_values.get('weight_hg', '') }}" placeholder="e.g. 69">
+          </label>
+          <label>
+            <span>Base experience</span>
+            <input name="base_experience" type="number" min="0" step="any" required value="{{ form_values.get('base_experience', '') }}" placeholder="e.g. 64">
+          </label>
+          <label>
+            <span>HP</span>
+            <input name="hp" type="number" min="0" step="any" required value="{{ form_values.get('hp', '') }}" placeholder="e.g. 45">
+          </label>
+          <label>
+            <span>Attack</span>
+            <input name="attack" type="number" min="0" step="any" required value="{{ form_values.get('attack', '') }}" placeholder="e.g. 49">
+          </label>
+          <label>
+            <span>Defense</span>
+            <input name="defense" type="number" min="0" step="any" required value="{{ form_values.get('defense', '') }}" placeholder="e.g. 49">
+          </label>
+          <label class="type-field">
+            <span>Secondary type</span>
+            <select name="type_2" required>
+              {% for type in secondary_types %}
+                <option value="{{ type }}" {% if form_values.get('type_2', 'unknown') == type %}selected{% endif %}>
+                  {% if type == 'unknown' %}None{% else %}{{ type|capitalize }}{% endif %}
+                </option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button class="button" type="submit">Predict primary type <span aria-hidden="true">→</span></button>
+          <a class="back-link" href="{{ url_for('home') }}">Back to home</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>Input measurements should use the units shown next to each field.</footer>
+</body>
+</html>

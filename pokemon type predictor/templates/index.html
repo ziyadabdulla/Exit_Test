@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PokéType | Pokémon Type Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">P</span> PokéType</a>
+    <nav aria-label="Main navigation">
+      <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+      <a class="button button-small" href="{{ url_for('predict') }}">Try the predictor</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">A data-powered Pokémon project</p>
+        <h1>What’s your Pokémon’s <span>battle type?</span></h1>
+        <p class="hero-description">
+          Enter a Pokémon’s battle stats and secondary type. The trained model
+          uses those details to predict its primary type.
+        </p>
+        <a class="button" href="{{ url_for('predict') }}">Make a prediction <span aria-hidden="true">→</span></a>
+        <p class="fine-print">A fun estimate from the project dataset, not an official game result.</p>
+      </div>
+      <div class="orbital-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="pokeball"><span></span></div>
+        <span class="spark spark-one">✦</span>
+        <span class="spark spark-two">✧</span>
+      </div>
+    </section>
+
+    <section class="details" aria-label="About the predictor">
+      <article class="detail-card">
+        <p class="eyebrow">The model</p>
+        <h2>Random Forest</h2>
+        <p>Trained on the Pokémon dataset using six numeric stats and the selected secondary type.</p>
+      </article>
+      <article class="detail-card accuracy-card">
+        <p class="eyebrow">Notebook test accuracy</p>
+        <h2>{{ "%.1f"|format(model_info.accuracy * 100) }}%</h2>
+        <p>Reported on the notebook’s held-out test set. Predictions can be wrong, especially across many type classes.</p>
+      </article>
+      <article class="detail-card">
+        <p class="eyebrow">Your turn</p>
+        <h2>Six stats + a type</h2>
+        <p>Provide height, weight, base experience, HP, attack, defense, and the secondary type.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>Made for curious trainers. Predictions are based on the provided project dataset.</footer>
+</body>
+</html>
